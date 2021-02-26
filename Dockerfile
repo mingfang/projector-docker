@@ -73,10 +73,51 @@ RUN true \
 # packages for user convenience:
     && apt-get install git bash-completion -y \
 # packages for IDEA (to disable warnings):
-    && apt-get install procps -y \
-# clean apt to reduce image size:
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /var/cache/apt
+    && apt-get install procps -y
+
+# Build tools
+RUN apt-get install -y build-essential
+
+# useful tools
+RUN apt-get install -y --no-install-recommends vim less net-tools inetutils-ping wget curl git telnet nmap socat dnsutils netcat tree htop unzip jq httpie psmisc iproute2 ssh rsync sudo
+
+# Default to Python 3
+RUN apt-get install -y python3.7-dev
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.7 100
+RUN ln -s /usr/bin/python /usr/local/bin/python
+
+# pip
+RUN apt-get install -y python3-distutils
+RUN wget -O - https://bootstrap.pypa.io/get-pip.py | python
+
+# Nodejs
+RUN wget -O - https://nodejs.org/dist/v15.6.0/node-v15.6.0-linux-x64.tar.gz | tar xz
+RUN mv node* /opt/node
+RUN ln -s /opt/node/bin/* /usr/local/bin
+
+# Docker client
+RUN wget -O - https://download.docker.com/linux/static/stable/x86_64/docker-20.10.2.tgz | tar zx -C /usr/local/bin --strip-components=1 docker/docker
+
+# Docker Compose
+RUN curl -L "https://github.com/docker/compose/releases/download/1.28.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+
+# kubectl
+RUN wget -P /usr/local/bin https://storage.googleapis.com/kubernetes-release/release/v1.19.1/bin/linux/amd64/kubectl
+RUN chmod +x /usr/local/bin/kubectl
+
+# JDK
+RUN apt-get -y install openjdk-11-jdk
+
+#Maven
+RUN curl http://apache.osuosl.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz | tar zx
+RUN mv apache-maven* maven && \
+    ln -s /maven/bin/mvn /usr/bin/mvn
+
+# Terraform
+RUN wget https://releases.hashicorp.com/terraform/0.13.5/terraform_0.13.5_linux_amd64.zip && \
+    unzip *.zip && \
+    mv terraform /usr/local/bin && \
+    rm *.zip
 
 ARG downloadUrl
 
@@ -114,8 +155,12 @@ RUN true \
     && chown -R $PROJECTOR_USER_NAME.$PROJECTOR_USER_NAME $PROJECTOR_DIR/ide/bin \
     && chown $PROJECTOR_USER_NAME.$PROJECTOR_USER_NAME run.sh
 
+RUN adduser $PROJECTOR_USER_NAME sudo
+RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 USER $PROJECTOR_USER_NAME
 ENV HOME /home/$PROJECTOR_USER_NAME
+WORKDIR /home/$PROJECTOR_USER_NAME
 
 EXPOSE 8887
 
