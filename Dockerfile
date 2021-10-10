@@ -80,6 +80,7 @@ RUN apt-get install -y build-essential
 
 # useful tools
 RUN apt-get install -y --no-install-recommends vim less net-tools inetutils-ping wget curl git telnet nmap socat dnsutils netcat tree htop unzip jq httpie psmisc iproute2 ssh rsync sudo
+RUN apt-get install -y --no-install-recommends make build-essential g++ libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
 # Default to Python 3
 RUN apt-get install -y python3.7-dev
@@ -118,6 +119,16 @@ RUN wget https://releases.hashicorp.com/terraform/0.13.5/terraform_0.13.5_linux_
     unzip *.zip && \
     mv terraform /usr/local/bin && \
     rm *.zip
+
+# sgr
+RUN wget https://github.com/splitgraph/splitgraph/releases/download/v0.2.16/sgr-linux-x86_64 && \
+    chmod +x sgr-* && \
+    mv sgr-* /usr/local/bin/sgr
+
+# Other OS packages
+RUN apt-get  install -y ghostscript python3-tk libmagickwand-dev
+# Enable ImageMagick to process PDF files
+RUN sed -i -e 's|<policy domain="coder" rights="none" pattern="PDF" />||' /etc/ImageMagick-6/policy.xml
 
 ARG downloadUrl
 
