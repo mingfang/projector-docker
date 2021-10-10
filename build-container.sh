@@ -22,7 +22,7 @@ set -x # Activate debugging to show execution details: all commands will be prin
 # intellij
 
 containerName=${1:-ripper1:5000/projector-idea-c}
-downloadUrl=${2:-https://download.jetbrains.com/idea/ideaIU-2020.3.2.tar.gz}
+downloadUrl=${2:-https://download.jetbrains.com/idea/ideaIU-2021.2.2.tar.gz}
 
 # build container:
 DOCKER_BUILDKIT=1 docker build --pull --progress=plain -t "$containerName" --build-arg buildGradle=true --build-arg "downloadUrl=$downloadUrl" -f Dockerfile ..
@@ -31,7 +31,7 @@ docker push $containerName
 # pycharm community
 
 containerName=${1:-ripper1:5000/projector-pycharm-community}
-downloadUrl=${2:-https://download.jetbrains.com/python/pycharm-community-2020.2.tar.gz}
+downloadUrl=${2:-https://download.jetbrains.com/python/pycharm-community-2021.2.1.tar.gz}
 
 # build container:
 DOCKER_BUILDKIT=1 docker build --progress=plain -t "$containerName" --build-arg buildGradle=true --build-arg "downloadUrl=$downloadUrl" -f Dockerfile ..
@@ -43,8 +43,8 @@ containerName=${1:-ripper1:5000/projector-pycharm-professional}
 downloadUrl=${2:-https://download.jetbrains.com/python/pycharm-professional-2020.2.tar.gz}
 
 # build container:
-DOCKER_BUILDKIT=1 docker build --progress=plain -t "$containerName" --build-arg buildGradle=true --build-arg "downloadUrl=$downloadUrl" -f Dockerfile ..
-docker push $containerName
+#DOCKER_BUILDKIT=1 docker build --progress=plain -t "$containerName" --build-arg buildGradle=true --build-arg "downloadUrl=$downloadUrl" -f Dockerfile ..
+#docker push $containerName
 
 # datagrip
 
@@ -52,8 +52,8 @@ containerName=${1:-ripper1:5000/projector-datagrip}
 downloadUrl=${2:-https://download.jetbrains.com/datagrip/datagrip-2020.2.tar.gz}
 
 # build container:
-DOCKER_BUILDKIT=1 docker build --progress=plain -t "$containerName" --build-arg buildGradle=true --build-arg "downloadUrl=$downloadUrl" -f Dockerfile ..
-docker push $containerName
+#DOCKER_BUILDKIT=1 docker build --progress=plain -t "$containerName" --build-arg buildGradle=true --build-arg "downloadUrl=$downloadUrl" -f Dockerfile ..
+#docker push $containerName
 
 # rider
 
@@ -61,5 +61,5 @@ containerName=${1:-ripper1:5000/projector-rider}
 downloadUrl=${2:-https://download.jetbrains.com/rider/JetBrains.Rider-2020.2.4.tar.gz}
 
 # build container:
-DOCKER_BUILDKIT=1 docker build --progress=plain -t "$containerName" --build-arg buildGradle=true --build-arg "downloadUrl=$downloadUrl" -f Dockerfile ..
-docker push $containerName
+#DOCKER_BUILDKIT=1 docker build --progress=plain -t "$containerName" --build-arg buildGradle=true --build-arg "downloadUrl=$downloadUrl" -f Dockerfile ..
+#docker push $containerName
